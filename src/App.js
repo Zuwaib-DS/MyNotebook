@@ -1,9 +1,9 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Container from "./components/container";
+import Container from "./components/Container";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./components/login";
-import Signup from "./components/signup";
+import Login from "./components/Login"
+import Signup from "./components/Signup";
 
 
 function App() {

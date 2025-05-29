@@ -8,7 +8,7 @@ const router = express.Router();
 // Route 1: Get all notes for logged in user: GET "/api/notes"
 router.get('/', authenticateUser, async (req, res) => {
     try {
-        const notes = await Note.find({ user: req.user.userId });
+        const notes = await Note.find({ user: req.user.userId }).sort({ date: -1 });
         res.json(notes);
     } catch (error) {
         res.status(500).send('Internal Server Error', error.message);

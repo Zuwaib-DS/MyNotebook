@@ -1,5 +1,5 @@
-import Navbar from "./navbar";
-import Notes from "./notes";
+import Navbar from "./Navbar";
+import Notes from "./Notes";
 
 function Container() {
   return (

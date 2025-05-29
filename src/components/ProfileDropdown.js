@@ -1,9 +1,9 @@
 import UserAuth from "../helpers/UserAuth";
-import { useNavigate } from "react-router-dom"; 
-
+import { Link, useNavigate } from "react-router-dom";
 
 function ProfileDropdown() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const userAuth = UserAuth.getAuth();
 
   const handleLogout = () => {
     UserAuth.clearAuth();
@@ -12,8 +12,8 @@ function ProfileDropdown() {
 
   return (
     <div className="dropdown text-end">
-      <a
-        href="#"
+      <Link
+        to="/"
         className="d-flex align-items-center text-decoration-none dropdown-toggle"
         id="profileDropdown"
         data-bs-toggle="dropdown"
@@ -26,8 +26,8 @@ function ProfileDropdown() {
           height="40"
           className="rounded-circle me-2"
         />
-        <span className="d-none d-md-inline">Zuwaib</span>
-      </a>
+        <span className="d-none d-md-inline">{userAuth.name}</span>
+      </Link>
       <ul
         className="dropdown-menu dropdown-menu-end text-small shadow"
         aria-labelledby="profileDropdown"
@@ -41,10 +41,10 @@ function ProfileDropdown() {
           <a className="dropdown-item" href="/change-password">
             Change Password
           </a>
-        </li> */}
+        </li>
         <li>
           <hr className="dropdown-divider" />
-        </li>
+        </li> */}
         <li>
           <button className="dropdown-item" onClick={handleLogout}>
             Logout
