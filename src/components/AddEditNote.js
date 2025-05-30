@@ -30,7 +30,7 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
       body: JSON.stringify(data),
     });
     if (response.status === 200) {
-      let result = await response.json();
+      //let result = await response.json();
       auth.showAlert("Note saved successfully!", "success");
       ModalHelpers.HideModal("noteModal"); // Hide the modal using Bootstrap's modal API
       e.target.reset(); // Reset the form fields
@@ -81,6 +81,7 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
                   // Update the selected note's title only. '...selectedNote' is used to keep the existing note data intact.
                 }
                 required
+                maxLength={100}
               />
             </div>
             <div className="mb-3">
@@ -97,6 +98,7 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
                   setSelectedNote({ ...selectedNote, description: e.target.value })
                 }
                 required
+                maxLength={1000}
               ></textarea>
             </div>
           </div>

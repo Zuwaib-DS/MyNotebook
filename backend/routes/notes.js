@@ -8,7 +8,8 @@ const router = express.Router();
 // Route 1: Get all notes for logged in user: GET "/api/notes"
 router.get('/', authenticateUser, async (req, res) => {
     try {
-        const notes = await Note.find({ user: req.user.userId }).sort({ date: -1 });
+        const notes = await Note.find({ user: req.user.userId, isActive: true })
+            .sort({ isPinned: -1, pinnedAt: -1, updatedAt: -1 });
         res.json(notes);
     } catch (error) {
         res.status(500).send('Internal Server Error', error.message);
@@ -71,6 +72,9 @@ router.put(
             if (note.user.toString() !== req.user.userId) {
                 return res.status(401).json({ error: 'Not authorized' });
             }
+            // Keep the Create date unchanged, update the updatedAt field
+            newNote.date = note.date;
+            newNote.updatedAt = Date.now();
             note = await Note.findByIdAndUpdate(
                 req.params.id,
                 { $set: newNote },
@@ -96,8 +100,48 @@ router.delete(
             if (note.user.toString() !== req.user.userId) {
                 return res.status(401).json({ error: 'Not authorized' });
             }
-            await Note.findByIdAndDelete(req.params.id);
+
+            // Soft delete: set isActive to false instead of deleting
+            note.isActive = false;
+            note = await note.save();
+            //await Note.findByIdAndDelete(req.params.id);
             res.json({ message: 'Note deleted successfully', note });
+        } catch (error) {
+            res.status(500).send('Internal Server Error' + error.message);
+        }
+    }
+);
+
+// Route 5: Pin/ Unpin an existing note: PUT "/api/notes/pinunpin/:id/:pinStatus"
+router.put(
+    '/pinunpin/:id/:pinStatus',
+    authenticateUser,
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        
+        let newNote = {};
+        
+        try {
+            let note = await Note.findById(req.params.id);
+            if (!note) {
+                return res.status(404).json({ error: 'Note not found' });
+            }
+            if (note.user.toString() !== req.user.userId) {
+                return res.status(401).json({ error: 'Not authorized' });
+            }
+            // update only Pin status and PinnedAt date
+            newNote = note;
+            newNote.isPinned = req.params.pinStatus;
+            newNote.pinnedAt = req.params.pinStatus === true ? Date.now() : null;
+            note = await Note.findByIdAndUpdate(
+                req.params.id,
+                { $set: newNote },
+                { new: true }
+            );
+            res.json(note);
         } catch (error) {
             res.status(500).send('Internal Server Error' + error.message);
         }

@@ -20,3 +20,10 @@
 .App-link {
   color: #61dafb;
 }
+
+.btn-group-xs>.btn, .btn-xs {
+    --bs-btn-padding-y: 0.18rem;
+    --bs-btn-padding-x: 0.3rem;
+    --bs-btn-font-size: 0.6rem;
+    --bs-btn-border-radius: var(--bs-border-radius-sm);
+}

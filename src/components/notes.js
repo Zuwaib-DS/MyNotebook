@@ -53,14 +53,27 @@ function Notes() {
 
         <div className="row g-4" id="notesContainer">
           {notesList.map((note, i) => (
-            <NoteItem note={note} setSelectedNote={setSelectedNote}></NoteItem>
+            <div className="col-md-4" key={i}>
+              <NoteItem
+                note={note}
+                setSelectedNote={setSelectedNote}
+                fetchNotes={fetchNotes}
+              ></NoteItem>
+            </div>
           ))}
-
         </div>
       </div>
 
-      <AddEditNote fetchNotes={fetchNotes} selectedNote={selectedNote} setSelectedNote={setSelectedNote} />
-      <DeleteModal fetchNotes={fetchNotes} selectedNote={selectedNote} setSelectedNote={setSelectedNote} />
+      <AddEditNote
+        fetchNotes={fetchNotes}
+        selectedNote={selectedNote}
+        setSelectedNote={setSelectedNote}
+      />
+      <DeleteModal
+        fetchNotes={fetchNotes}
+        selectedNote={selectedNote}
+        setSelectedNote={setSelectedNote}
+      />
     </>
   );
 }
