@@ -30,6 +30,11 @@ function Navbar() {
                 My Notes
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" aria-current="page" to="/balance">
+                Balance
+              </Link>
+            </li>
           </ul>
           <ProfileDropdown />
         </div>
