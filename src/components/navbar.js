@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import logo from "../logo.svg";
 import ProfileDropdown from "./ProfileDropdown";
+import { useSelector } from "react-redux";
 
 function Navbar() {
+  const amount = useSelector((state) => state.amount);
   return (
     <nav
       className="navbar bg-dark border-bottom navbar-expand-lg"
@@ -32,7 +34,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <Link className="nav-link" aria-current="page" to="/balance">
-                Balance
+                Balance ({amount})
               </Link>
             </li>
           </ul>

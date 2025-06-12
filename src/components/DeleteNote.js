@@ -25,7 +25,7 @@ function DeleteNote({ fetchNotes, selectedNote, setSelectedNote }) {
       },
     });
     if (response.status === 200) {
-      let result = await response.json();
+      //let result = await response.json();
       auth.showAlert("Note deleted successfully!", "success");
       ModalHelpers.HideModal("deleteModal"); // Hide the modal using Bootstrap's modal API
       e.target.reset(); // Reset the form fields
