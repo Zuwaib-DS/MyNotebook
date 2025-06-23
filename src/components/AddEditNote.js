@@ -4,6 +4,12 @@ import { useContext } from "react";
 import authContext from "../context/auth/AuthContext";
 import ModalHelpers from "../helpers/Modal";
 
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+import "ckeditor5/ckeditor5.css";
+import "ckeditor5-premium-features/ckeditor5-premium-features.css";
+
 function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
   const navigate = useNavigate();
   const auth = useContext(authContext);
@@ -13,14 +19,13 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
     let notesApiUrl = process.env.REACT_APP_API_BASE_URL + "notes";
     const formData = new FormData(e.target);
     const data = {
-      title: formData.get("noteTitle"),
-      description: formData.get("noteDescription"),
+      title: selectedNote?.title,
+      description: selectedNote?.description,
     };
-    
+
     let method = formData.get("noteId") ? "PUT" : "POST";
-    if(method === "PUT") 
-        notesApiUrl += `/${formData.get("noteId")}` // Include noteId only for updates
-    
+    if (method === "PUT") notesApiUrl += `/${formData.get("noteId")}`; // Include noteId only for updates
+
     let response = await fetch(notesApiUrl, {
       method: method,
       headers: {
@@ -65,7 +70,11 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
             ></button>
           </div>
           <div className="modal-body">
-            <input type="hidden" name="noteId" value={selectedNote?._id || ""} />
+            <input
+              type="hidden"
+              name="noteId"
+              value={selectedNote?._id || ""}
+            />
             <div className="mb-3">
               <label htmlFor="noteTitle" className="form-label">
                 Title
@@ -76,8 +85,9 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
                 id="noteTitle"
                 name="noteTitle"
                 value={selectedNote?.title || ""}
-                onChange={(e) =>
-                  setSelectedNote({ ...selectedNote, title: e.target.value })
+                onChange={
+                  (e) =>
+                    setSelectedNote({ ...selectedNote, title: e.target.value })
                   // Update the selected note's title only. '...selectedNote' is used to keep the existing note data intact.
                 }
                 required
@@ -88,18 +98,45 @@ function AddEditNote({ fetchNotes, selectedNote, setSelectedNote }) {
               <label htmlFor="noteDescription" className="form-label">
                 Description
               </label>
-              <textarea
+              <CKEditor
+                editor={ClassicEditor}
+                data={selectedNote?.description || ""}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  setSelectedNote({ ...selectedNote, description: data });
+                }}
+                className="custom-editor-height"
+                name="noteDescription"
+                id="noteDescription"
+                config={{
+                  toolbar: [
+                    "undo",
+                    "redo",
+                    "|",
+                    "bold",
+                    "italic",
+                    "link",
+                    "bulletedList",
+                    "numberedList",
+                  ],
+                  placeholder: "Enter note description here...",
+                }}
+              />
+              {/* <textarea
                 className="form-control"
                 id="noteDescription"
                 name="noteDescription"
                 rows="4"
                 value={selectedNote?.description || ""}
                 onChange={(e) =>
-                  setSelectedNote({ ...selectedNote, description: e.target.value })
+                  setSelectedNote({
+                    ...selectedNote,
+                    description: e.target.value,
+                  })
                 }
                 required
                 maxLength={1000}
-              ></textarea>
+              ></textarea> */}
             </div>
           </div>
           <div className="modal-footer">

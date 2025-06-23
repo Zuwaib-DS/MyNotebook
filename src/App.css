@@ -27,3 +27,7 @@
     --bs-btn-font-size: 0.6rem;
     --bs-btn-border-radius: var(--bs-border-radius-sm);
 }
+
+.ck-editor__editable_inline{
+  height: 150px;
+}

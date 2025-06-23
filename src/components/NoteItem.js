@@ -57,9 +57,9 @@ function NoteItem({ note, setSelectedNote, fetchNotes }) {
         </div>
 
         <TooltipControl text={note.description}>
-          <p className="card-text text-muted">{note.description && note.description.length > 150
-                ? `${note.description.substring(0, 150)}...`
-                : note.description}</p>
+            <p className="card-text text-muted" dangerouslySetInnerHTML={{__html: note.description && note.description.length > 150
+                  ? `${note.description.substring(0, 150)}...`
+                  : note.description}}></p>
         </TooltipControl>
         <div className="mb-2">
           <small className="text-secondary d-block">
